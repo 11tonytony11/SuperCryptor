@@ -60,7 +60,7 @@ public class MainWindow extends JFrame
         pack();
     }
 
-    private void addComponent(Component component, int x, int y, int paddingTop, int PaddingBottom, int fill)
+    private void addComponent(Component component, int gridx, int gridy, int paddingTop, int PaddingBottom, int fill)
     {
         // Init property class
         GridBagConstraints constraints = new GridBagConstraints();
@@ -71,8 +71,8 @@ public class MainWindow extends JFrame
         constraints.fill   = fill;
 
         // Init location
-        constraints.gridx = x;
-        constraints.gridy = y;
+        constraints.gridx = gridx;
+        constraints.gridy = gridy;
 
         // Add component to GUI
         add(component, constraints);
