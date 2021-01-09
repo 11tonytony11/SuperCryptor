@@ -2,7 +2,6 @@ import javax.swing.*;
 
 /*
 * Todo:
-** Implement MathUtil
 ** Implement Handler
 ** Implement Encryption Algorithms (Threads?)
 ** Implement Decision Tree
