@@ -2,13 +2,14 @@ import javax.swing.*;
 
 /*
 * Todo:
-* Implement Handler
-* Implement MathUtil
-* Implement Encryption Algorithms (Threads?)
-* Implement Decision Tree
-* Improve GUI
-* Bug Fixes
-* */
+** Implement MathUtil
+** Implement Handler
+** Implement Encryption Algorithms (Threads?)
+** Implement Decision Tree
+** Finish GUI
+** connect backend to GUI
+** Bug Fixes
+*/
 public class Main
 {
     public static void main(String[] args)
