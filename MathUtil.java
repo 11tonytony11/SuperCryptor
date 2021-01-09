@@ -23,9 +23,12 @@ public class MathUtil
     Input:  reference number
     Output: Key
     */
-    public int pseudoRandom(int num)
+    public int pseudoRandom(long num)
     {
         int output = 0;
+        Random rand = new Random(num);
+
+        output = rand.nextInt() * rand.nextInt(4) - rand.nextInt(150);
 
         return output;
     }
@@ -35,11 +38,12 @@ public class MathUtil
     Input:  reference number
     Output: Key
     */
-    public int pascal(int num)
+    public int pascal(int row, int num)
     {
-        int output = 0;
+        if ((row == num) || (num == 0))
+            return 1;
 
-        return output;
+        return pascal(row - 1, num) + pascal(row - 1, num - 1);
     }
     //-----------------------------------------------------------------------------------------------------------
     /*
@@ -50,6 +54,10 @@ public class MathUtil
     public int fibonacci(int num)
     {
         int output = 0;
+        double partial = 0;
+
+        partial = (1 + Math.sqrt(5)) / 2;
+        output = (int) Math.round(Math.pow(partial, num) / Math.sqrt(5));
 
         return output;
     }
@@ -62,6 +70,8 @@ public class MathUtil
     public int hanoiTower(int num)
     {
         int output = 0;
+
+        output = (int)((Math.log10(num & -num)) / Math.log10(2)) + 1;
 
         return output;
     }
