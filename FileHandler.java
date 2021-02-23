@@ -1,45 +1,50 @@
 import javax.swing.*;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.*;
 
-public class Handler
+public class FileHandler
 {
-    //Encryption encryption;
-
-    //Recommender recommender;
-    MathUtil math;
-    byte[] binary;
+    File file;
     String path;
     //-----------------------------------------------------------------------------------------------------------
     /*
     This is the handler constructor
-    Input:  File path
+    Input:  None
     Output: None
     */
-    public Handler(String newPath)
+    public FileHandler(File newFile)
     {
-        math = new MathUtil();
-        this.path = newPath;
-        loadFile();
+        this.file = newFile;
     }
     //-----------------------------------------------------------------------------------------------------------
     /*
     This function opens the file and converts it to binary
     Input:  None
-    Output: None
+    Output: file bytes
     */
-    public void loadFile()
+    public byte[] loadFile(String newPath)
     {
+        byte[] data = null;
+
         try
         {
-            this.binary = Files.readAllBytes(Paths.get(this.path));
+            FileInputStream fileInputStream = new FileInputStream(file);
+            data  = new byte[(int) file.length()];
+
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
+            bufferedInputStream.read(data,0,data.length);
+
+            fileInputStream.close();
+            bufferedInputStream.close();
+
+            this.path = newPath;
+
         }
         catch (IOException ex)
         {
             JOptionPane.showMessageDialog(null, "SuperCryptor encountered critical error while trying to open the file", "Error!", JOptionPane.ERROR_MESSAGE);
         }
+
+        return data;
     }
     //-----------------------------------------------------------------------------------------------------------
     /*
@@ -47,27 +52,19 @@ public class Handler
     Input:  None
     Output: New File
     */
-    public void saveFile()
+    public void saveFile(byte[] binary)
     {
         try
         {
-            Path path = Paths.get(this.path);
-            Files.write(path, this.binary);
+            File outFile = new File(this.file.getParentFile(), "SuperCryptor" + this.file.getName());
+            FileOutputStream out= new FileOutputStream(outFile);
+            out.write(binary);
+
+            out.close();
         }
         catch (IOException ex)
         {
             JOptionPane.showMessageDialog(null, "SuperCryptor encountered critical error while trying to save the file", "Error!", JOptionPane.ERROR_MESSAGE);
         }
-    }
-    //-----------------------------------------------------------------------------------------------------------
-    /*
-    This function calls the encryptor to encrypt/decrypt file
-    Input:  None
-    Output: None
-    */
-    public void callEncryption(int keyGen, int encryption)
-    {
-        JOptionPane.showMessageDialog(null, "Not implemented", "Error!", JOptionPane.ERROR_MESSAGE);
-        saveFile();
     }
 }
