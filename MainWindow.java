@@ -5,7 +5,6 @@ public class MainWindow extends JFrame
 {
     // Text Fields
     final private JPasswordField fieldKey  = new JPasswordField(20);
-    final private JPasswordField fieldSec  = new JPasswordField(20);
     final private JTextField     fieldPath = new JTextField(20);
 
     // Menus
@@ -19,16 +18,16 @@ public class MainWindow extends JFrame
 
     // Labels
     final JLabel labelEnc  = new JLabel("Encryption Type: ");
-    final JLabel labelKey  = new JLabel("Encryption key: ");
-    final JLabel labelSec  = new JLabel("Secondary key: ");
+    final JLabel labelKey  = new JLabel("Encryption key(s): ");
     final JLabel labelGen  = new JLabel("Key Generator: ");
     final JLabel labelPath = new JLabel("Choose a file: ");
 
     // Check Box
-    final JCheckBox checkPwd = new JCheckBox("Show Key");
+    final JCheckBox checkPwd = new JCheckBox("Show Key(s)");
 
-    //Encryption Handler
-    Handler handler;
+    // File handler and encryption
+    FileHandler fileHandler;
+    Encryption enc;
 
     public MainWindow()
     {
@@ -46,8 +45,14 @@ public class MainWindow extends JFrame
 
         // Events
         addKeyToggleEvent();
+        addEncryptEvent();
+        addDecryptEvent();
         addBrowseEvent();
-        addKeyEvent();
+        addComboEvent();
+
+        // Hide generators
+        comboGen.setVisible(false);
+        labelGen.setVisible(false);
 
         pack();
     }
@@ -62,7 +67,6 @@ public class MainWindow extends JFrame
         addComponent(labelPath, 0, 0, 30, 10, GridBagConstraints.HORIZONTAL);
         addComponent(labelEnc,  0, 1, 10, 10, GridBagConstraints.HORIZONTAL);
         addComponent(labelGen,  0, 2, 10, 10, GridBagConstraints.HORIZONTAL);
-        addComponent(labelSec,  0, 4, 10, 10, GridBagConstraints.HORIZONTAL);
         addComponent(labelKey,  0, 3, 10, 10, GridBagConstraints.WEST);
     }
     //-----------------------------------------------------------------------------------------------------------
@@ -87,7 +91,6 @@ public class MainWindow extends JFrame
     {
         addComponent(fieldPath, 1, 0, 30, 10, GridBagConstraints.HORIZONTAL);
         addComponent(fieldKey,  1, 3, 10, 10, GridBagConstraints.HORIZONTAL);
-        addComponent(fieldSec,  1, 4, 10, 10, GridBagConstraints.HORIZONTAL);
         addComponent(checkPwd,  2, 3, 10, 10, GridBagConstraints.HORIZONTAL);
     }
     //-----------------------------------------------------------------------------------------------------------
@@ -126,22 +129,6 @@ public class MainWindow extends JFrame
     }
     //-----------------------------------------------------------------------------------------------------------
     /*
-    This function binds secondary key event
-    Input:  None
-    Output: None
-    */
-    private void addKeyEvent()
-    {
-        comboEnc.addItemListener(arg0 ->
-        {
-            boolean flag = comboEnc.getSelectedIndex() < 2;
-            labelSec.setVisible(flag);
-            fieldSec.setVisible(flag);
-            pack();
-        });
-    }
-    //-----------------------------------------------------------------------------------------------------------
-    /*
     This function binds file browse button
     Input:  None
     Output: None
@@ -156,6 +143,7 @@ public class MainWindow extends JFrame
             if(returnVal == JFileChooser.APPROVE_OPTION)
             {
                 fieldPath.setText(browser.getSelectedFile().getPath());
+                fileHandler = new FileHandler(browser.getSelectedFile());
             }
         });
     }
@@ -171,7 +159,46 @@ public class MainWindow extends JFrame
         {
             char echo = checkPwd.isSelected() ? (char)0 : '•';
             fieldKey.setEchoChar(echo);
-            fieldSec.setEchoChar(echo);
         });
+    }
+    //-----------------------------------------------------------------------------------------------------------
+    /*
+    This function adds combo boxes events
+    Input:  None
+    Output: None
+    */
+    private void addComboEvent()
+    {
+        comboEnc.addActionListener(e ->
+        {
+            int idx = comboEnc.getSelectedIndex();
+            boolean flag = idx > 2;
+
+            comboGen.setVisible(flag);
+            labelGen.setVisible(flag);
+            pack();
+        });
+    }
+    //-----------------------------------------------------------------------------------------------------------
+    /*
+    This function calls the encryption
+    Input:  None
+    Output: None
+    */
+    private void addEncryptEvent()
+    {
+        btnEncrypt.addActionListener(e ->
+                JOptionPane.showMessageDialog(null, "Not implemented", "Error!", JOptionPane.ERROR_MESSAGE));
+    }
+    //-----------------------------------------------------------------------------------------------------------
+    /*
+    This function calls the decryption
+    Input:  None
+    Output: None
+    */
+    private void addDecryptEvent()
+    {
+        btnDecrypt.addActionListener(e ->
+                JOptionPane.showMessageDialog(null, "Not implemented", "Error!", JOptionPane.ERROR_MESSAGE));
     }
 }
