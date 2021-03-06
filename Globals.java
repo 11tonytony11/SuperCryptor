@@ -1,6 +1,6 @@
 public class Globals
 {
-    public static final String[] Encryptions = { "Path Encryption", "Knight's tour", "Sudoku", "Shuffle Card" , "Half XOR"  };
+    public static final String[] Encryptions = { "Path Encryption", "Knight's Tour", "Sudoku", "Shuffle Card" , "Half XOR"  };
     public static final String[] Generators  = { "Fibonacci", "Pascal", "Hanoi" };
 
     public static String REGEX_FILTER = "[^a-zA-Z0-9,]";
