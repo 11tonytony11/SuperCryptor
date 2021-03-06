@@ -1,11 +1,16 @@
+import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import javax.swing.*;
 import java.awt.*;
+
 
 public class MainWindow extends JFrame
 {
     // Text Fields
-    final private JPasswordField fieldKey  = new JPasswordField(20);
-    final private JTextField     fieldPath = new JTextField(20);
+    final private JPasswordField fieldKey  = new JPasswordField(Globals.FIELD_LEN);
+    final private JTextField     fieldPath = new JTextField(Globals.FIELD_LEN);
 
     // Menus
     final private JComboBox<String> comboEnc = new JComboBox<>(Globals.Encryptions);
@@ -92,6 +97,8 @@ public class MainWindow extends JFrame
         addComponent(fieldPath, 1, 0, 30, 10, GridBagConstraints.HORIZONTAL);
         addComponent(fieldKey,  1, 3, 10, 10, GridBagConstraints.HORIZONTAL);
         addComponent(checkPwd,  2, 3, 10, 10, GridBagConstraints.HORIZONTAL);
+
+        fieldKey.putClientProperty("JPasswordField.cutCopyAllowed",true);
     }
     //-----------------------------------------------------------------------------------------------------------
     /*
@@ -137,7 +144,7 @@ public class MainWindow extends JFrame
     {
         btnBrowse.addActionListener(e ->
         {
-            JFileChooser browser = new JFileChooser();
+            JFileChooser browser = new JFileChooser(System.getProperty("user.home") + "/Desktop");
             int returnVal = browser.showOpenDialog(btnBrowse);
 
             if(returnVal == JFileChooser.APPROVE_OPTION)
@@ -176,6 +183,7 @@ public class MainWindow extends JFrame
 
             comboGen.setVisible(flag);
             labelGen.setVisible(flag);
+
             pack();
         });
     }
@@ -188,7 +196,38 @@ public class MainWindow extends JFrame
     private void addEncryptEvent()
     {
         btnEncrypt.addActionListener(e ->
-                JOptionPane.showMessageDialog(null, "Not implemented", "Error!", JOptionPane.ERROR_MESSAGE));
+        {
+            List<Integer> keys = generateKeys();
+
+            if(keys == null)
+                return;
+
+            switch (comboEnc.getSelectedIndex())
+            {
+                case 0:
+                    this.enc = new PathEncryption(keys, this.fileHandler.loadFile());
+                    break;
+                case 1:
+                    this.enc = new KnightsEncryption(keys, this.fileHandler.loadFile());
+                    break;
+                case 2:
+                    this.enc = new SudokuEncryption(keys, this.fileHandler.loadFile());
+                    break;
+                case 3:
+                    this.enc = new ShuffleEncryption(keys, this.fileHandler.loadFile());
+                    break;
+                case 4:
+                    this.enc = new XorEncryption(keys, this.fileHandler.loadFile());
+                    break;
+            }
+
+            // Encrypt & Save
+            fileHandler.saveFile(this.enc.encrypt());
+
+            // Give key to user and notify him the encryption is done
+            fieldKey.setText(keys.toString().replaceAll(Globals.REGEX_FILTER, ""));
+            JOptionPane.showMessageDialog(null, "Done", "Done!", JOptionPane.INFORMATION_MESSAGE);
+        });
     }
     //-----------------------------------------------------------------------------------------------------------
     /*
@@ -199,6 +238,95 @@ public class MainWindow extends JFrame
     private void addDecryptEvent()
     {
         btnDecrypt.addActionListener(e ->
-                JOptionPane.showMessageDialog(null, "Not implemented", "Error!", JOptionPane.ERROR_MESSAGE));
+        {
+            String keyInput = new String(fieldKey.getPassword());
+            List<Integer> keys = getKeysFromField(keyInput);
+
+            if(keys == null)
+                return;
+
+            switch (comboEnc.getSelectedIndex())
+            {
+                case 0:
+                    this.enc = new PathEncryption(keys, this.fileHandler.loadFile());
+                    break;
+                case 1:
+                    this.enc = new KnightsEncryption(keys, this.fileHandler.loadFile());
+                    break;
+                case 2:
+                    this.enc = new SudokuEncryption(keys, this.fileHandler.loadFile());
+                    break;
+                case 3:
+                    this.enc = new ShuffleEncryption(keys, this.fileHandler.loadFile());
+                    break;
+                case 4:
+                    this.enc = new XorEncryption(keys, this.fileHandler.loadFile());
+                    break;
+            }
+
+            fileHandler.saveFile(this.enc.decrypt());
+        });
+    }
+    //-----------------------------------------------------------------------------------------------------------
+    /*
+    This function generates key for last two encryptions in the menu
+    Input:  None
+    Output: None
+    */
+    public List<Integer> generateKeys()
+    {
+        int num;
+        List<Integer> res = new ArrayList<>();
+
+        switch (comboEnc.getSelectedIndex())
+        {
+            case 0:
+                return MathUtil.generatePathKeys(3);
+            case 1:
+                return MathUtil.generateKnightKeys();
+            case 2:
+                return MathUtil.generateSudokuKeys();
+            default:
+                break;
+        }
+
+        num = Integer.parseInt(JOptionPane.showInputDialog(this, "Enter your secret number: ", null));
+
+        switch(comboGen.getSelectedIndex())
+        {
+            case 0:
+                res.add(MathUtil.generateFibonacciKeys(num));
+                break;
+            case 1:
+                res.add(MathUtil.generatePascalKeys(num, num));
+                break;
+            case 2:
+                res.add(MathUtil.generateHanoiTowerKeys(num));
+                break;
+        }
+
+        return res;
+    }
+    //-----------------------------------------------------------------------------------------------------------
+    /*
+    This function generates key from GUI field
+    Input:  GUI input
+    Output: Keys as list
+    */
+    public static List<Integer> getKeysFromField(String input)
+    {
+        List<Integer> keys;
+
+        try
+        {
+            keys = Arrays.stream(input.split(Globals.KEY_PARSER)).map(Integer::parseInt).collect(Collectors.toList());
+        }
+        catch (Exception ex)
+        {
+            JOptionPane.showMessageDialog(null, "Invalid Key", "Error!", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+
+        return keys;
     }
 }
