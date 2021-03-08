@@ -54,7 +54,7 @@ public class MathUtil
     //-----------------------------------------------------------------------------------------------------------
     /*
     This function generates encryption keys with graph path calculations
-    Input:  None
+    Input:  dst point in graph
     Output: Keys
     */
     public static List<Integer> generatePathKeys(int newDst)
