@@ -2,12 +2,10 @@ import javax.swing.*;
 
 /*
 * Todo:
-** Implement Handler
-** Implement Encryption Algorithms (Threads?)
+** Connect Auto Decryption to GUI
 ** Implement Decision Tree
-** Finish GUI
-** connect backend to GUI
-** Bug Fixes
+** Connect Decision Tree to GUI
+** Final Fixes & Refactoring
 */
 public class Main
 {
