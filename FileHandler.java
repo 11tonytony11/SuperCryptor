@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FileHandler
 {
@@ -8,12 +10,13 @@ public class FileHandler
     //-----------------------------------------------------------------------------------------------------------
     /*
     This is the handler constructor
-    Input:  None
+    Input:  File object
     Output: None
     */
     public FileHandler(File newFile)
     {
         this.file = newFile;
+        this.path = newFile.getPath();
     }
     //-----------------------------------------------------------------------------------------------------------
     /*
@@ -21,7 +24,7 @@ public class FileHandler
     Input:  None
     Output: file bytes
     */
-    public byte[] loadFile(String newPath)
+    public byte[] loadFile()
     {
         byte[] data = null;
 
@@ -33,10 +36,9 @@ public class FileHandler
             BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
             bufferedInputStream.read(data,0,data.length);
 
+
             fileInputStream.close();
             bufferedInputStream.close();
-
-            this.path = newPath;
 
         }
         catch (IOException ex)
@@ -49,8 +51,8 @@ public class FileHandler
     //-----------------------------------------------------------------------------------------------------------
     /*
     This function converts byte array to File and saves it
-    Input:  None
-    Output: New File
+    Input:  binary
+    Output: None
     */
     public void saveFile(byte[] binary)
     {
@@ -58,13 +60,55 @@ public class FileHandler
         {
             File outFile = new File(this.file.getParentFile(), "SuperCryptor" + this.file.getName());
             FileOutputStream out= new FileOutputStream(outFile);
-            out.write(binary);
 
+            out.write(binary);
             out.close();
         }
         catch (IOException ex)
         {
             JOptionPane.showMessageDialog(null, "SuperCryptor encountered critical error while trying to save the file", "Error!", JOptionPane.ERROR_MESSAGE);
         }
+    }
+    //-----------------------------------------------------------------------------------------------------------
+    /*
+    This function saves encrypted file with decryption info
+    Input:  binary, key and encryption type
+    Output: None
+    */
+    public void saveFile(byte[] binary, int encryptionType, List<Integer> keys)
+    {
+        List<Integer> key = new ArrayList<>();
+        key.add(encryptionType);
+        key.addAll(keys);
+
+        String tmp = Globals.DELIMITER + key.toString().replaceAll(Globals.REGEX_FILTER, "") + Globals.DELIMITER;
+        byte[] output = new byte[tmp.getBytes().length + binary.length];
+
+        System.arraycopy(tmp.getBytes(), 0, output, 0, tmp.getBytes().length);
+        System.arraycopy(binary, 0, output, tmp.getBytes().length, binary.length);
+
+        saveFile(output);
+    }
+    //-----------------------------------------------------------------------------------------------------------
+    /*
+    This function loads key and encryption num from file
+    Input:  file binary
+    Output: key series and encryption type (Head of list is encryption type)
+    */
+    public List<Integer> getKeyFromFile(byte[] binary)
+    {
+        List<Integer> res = new ArrayList<>();
+
+        if(binary[0] != Globals.DELIMITER)
+        {
+            return null;
+        }
+
+        for(int i = 1; i < binary.length && binary[i] != Globals.DELIMITER; i++)
+        {
+            res.add((int)binary[i]);
+        }
+
+        return res;
     }
 }
