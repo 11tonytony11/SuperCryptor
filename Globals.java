@@ -4,7 +4,8 @@ public class Globals
     public static final String[] Generators  = { "Fibonacci", "Pascal", "Hanoi" };
 
     public static String REGEX_FILTER = "[^a-zA-Z0-9,]";
-    public static String KEY_PARSER = ",";
+    public static String KEY_PARSER   = ",";
+    public static char DELIMITER      = '#';
 
     public static final int CHESS_BOARD  = 5;
     public static final int SUDOKU_BOARD = 9;
