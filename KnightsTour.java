@@ -38,7 +38,7 @@ public class KnightsTour
         {
             for (int[] r: visited)
             {
-                locations.add(r[0]);
+                locations.add(r[0] % 10);
             }
 
             visited[x][y] = 0;
