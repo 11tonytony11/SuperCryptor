@@ -20,12 +20,12 @@ public class KnightsEncryption extends Encryption
     */
     public byte[] encrypt()
     {
-        int key;
+        int Skey;
 
         for(int i = 0; i < this.bin.length; i++)
         {
-            key = this.key.get(i % this.key.size());
-            this.bin[i] = (byte) (this.bin[i] ^ key);
+            Skey = this.key.get(i % this.key.size());
+            this.bin[i] = (byte) (this.bin[i] ^ Skey);
         }
 
         return this.bin;
