@@ -34,6 +34,8 @@ public class MainWindow extends JFrame
     FileHandler fileHandler;
     Encryption enc;
 
+    private List<Integer> keys;
+
     public MainWindow()
     {
         super("SuperCryptor");
@@ -151,6 +153,14 @@ public class MainWindow extends JFrame
             {
                 fieldPath.setText(browser.getSelectedFile().getPath());
                 fileHandler = new FileHandler(browser.getSelectedFile());
+                keys = fileHandler.getKeyFromFile();
+                if(keys != null)
+                {
+                    comboEnc.setSelectedIndex(keys.get(0));
+                    this.keys.remove(0);
+                    fieldKey.setText(keys.toString().replaceAll(Globals.REGEX_FILTER, ""));
+                    JOptionPane.showMessageDialog(null, "Encryption Detected - Auto Decryption is enabled", "Auto Decryption", JOptionPane.INFORMATION_MESSAGE);
+                }
             }
         });
     }
@@ -222,7 +232,7 @@ public class MainWindow extends JFrame
             }
 
             // Encrypt & Save
-            fileHandler.saveFile(this.enc.encrypt());
+            fileHandler.saveFile(this.enc.encrypt(), comboEnc.getSelectedIndex(), keys);
 
             // Give key to user and notify him the encryption is done
             fieldKey.setText(keys.toString().replaceAll(Globals.REGEX_FILTER, ""));
@@ -239,28 +249,35 @@ public class MainWindow extends JFrame
     {
         btnDecrypt.addActionListener(e ->
         {
-            String keyInput = new String(fieldKey.getPassword());
-            List<Integer> keys = getKeysFromField(keyInput);
+            if(this.keys == null)
+            {
+                String keyInput = new String(fieldKey.getPassword());
+                this.keys = getKeysFromField(keyInput);
+            }
 
-            if(keys == null)
+            byte[] binary = fileHandler.removeKeyFromFile(this.fileHandler.loadFile());
+
+            if(this.keys == null)
+            {
                 return;
+            }
 
             switch (comboEnc.getSelectedIndex())
             {
                 case 0:
-                    this.enc = new PathEncryption(keys, this.fileHandler.loadFile());
+                    this.enc = new PathEncryption(keys, binary);
                     break;
                 case 1:
-                    this.enc = new KnightsEncryption(keys, this.fileHandler.loadFile());
+                    this.enc = new KnightsEncryption(keys, binary);
                     break;
                 case 2:
-                    this.enc = new SudokuEncryption(keys, this.fileHandler.loadFile());
+                    this.enc = new SudokuEncryption(keys, binary);
                     break;
                 case 3:
-                    this.enc = new ShuffleEncryption(keys, this.fileHandler.loadFile());
+                    this.enc = new ShuffleEncryption(keys, binary);
                     break;
                 case 4:
-                    this.enc = new XorEncryption(keys, this.fileHandler.loadFile());
+                    this.enc = new XorEncryption(keys, binary);
                     break;
             }
 
