@@ -2,7 +2,6 @@ import javax.swing.*;
 
 /*
 * Todo:
-** Connect Auto Decryption to GUI
 ** Implement Decision Tree
 ** Connect Decision Tree to GUI
 ** Final Fixes & Refactoring
