@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class FileHandler
@@ -95,9 +96,10 @@ public class FileHandler
     Input:  file binary
     Output: key series and encryption type (Head of list is encryption type)
     */
-    public List<Integer> getKeyFromFile(byte[] binary)
+    public List<Integer> getKeyFromFile()
     {
         List<Integer> res = new ArrayList<>();
+        byte[] binary = loadFile();
 
         if(binary[0] != Globals.DELIMITER)
         {
@@ -106,9 +108,30 @@ public class FileHandler
 
         for(int i = 1; i < binary.length && binary[i] != Globals.DELIMITER; i++)
         {
-            res.add((int)binary[i]);
+            if ((int)binary[i] != 44)
+            {
+                res.add((int)binary[i] - '0');
+            }
         }
 
         return res;
+    }
+    //-----------------------------------------------------------------------------------------------------------
+    /*
+    This function removes key from file
+    Input:  binary data from file
+    Output: Cleaned file
+    */
+    public byte[] removeKeyFromFile(byte[] binary)
+    {
+        int idx = 1;
+
+        while(idx < binary.length && binary[idx] != Globals.DELIMITER)
+        {
+            idx++;
+        }
+
+        return Arrays.copyOfRange(binary, idx + 1, binary.length);
+
     }
 }
