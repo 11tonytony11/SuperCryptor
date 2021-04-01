@@ -1,26 +1,24 @@
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
-import java.util.Stack;
 
 class Graph
 {
     // adjacency list
-    private ArrayList<Integer>[] connections;
-    private List<Integer> paths;
-    private int vertics;
+    private final ArrayList<Integer>[] connections;
+    private final List<Integer> paths;
+    private final int vertics;
 
     //-----------------------------------------------------------------------------------------------------------
     /*
-    This function ints the graph
-    Input:  None
+    This is the Graph constructor
+    Input:  number of vertices
     Output: None
     */
     public Graph(int newVertices)
     {
         this.vertics = newVertices;
-
-        connections = new ArrayList[vertics];
+        this.paths = new ArrayList<>();
+        this.connections = new ArrayList[vertics];
 
         for (int i = 0; i < vertics; i++)
         {
@@ -39,9 +37,9 @@ class Graph
     }
     //-----------------------------------------------------------------------------------------------------------
     /*
-    This function finds path between two points in a graph
+    This function handles path calculation
     Input:  src and dst
-    Output: Possible paths
+    Output: None
     */
     public void CalculatePaths(int src, int dst)
     {
@@ -60,7 +58,6 @@ class Graph
     */
     private void CalculateAllPaths(Integer u, Integer d, boolean[] isVisited, List<Integer> localPathList)
     {
-        // If reached the end
         if (u.equals(d))
         {
             paths.addAll(localPathList);
