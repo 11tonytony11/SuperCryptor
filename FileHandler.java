@@ -1,8 +1,8 @@
-import javax.swing.*;
-import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import javax.swing.*;
+import java.io.*;
 
 public class FileHandler
 {
@@ -101,6 +101,11 @@ public class FileHandler
         List<Integer> res = new ArrayList<>();
         byte[] binary = loadFile();
 
+        if (binary.length == 0)
+        {
+            return null;
+        }
+
         if(binary[0] != Globals.DELIMITER)
         {
             return null;
@@ -108,7 +113,7 @@ public class FileHandler
 
         for(int i = 1; i < binary.length && binary[i] != Globals.DELIMITER; i++)
         {
-            if ((int)binary[i] != 44)
+            if ((int)binary[i] != Globals.COMMA)
             {
                 res.add((int)binary[i] - '0');
             }
