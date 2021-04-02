@@ -2,8 +2,8 @@ import java.util.List;
 
 abstract class Encryption
 {
-    protected List<Integer> key = null;
-    protected byte[] bin = null;
+    protected List<Integer> key;
+    protected byte[] bin;
 
     abstract public byte[] encrypt();
     abstract public byte[] decrypt();
