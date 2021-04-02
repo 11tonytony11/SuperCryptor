@@ -10,6 +10,12 @@ public class AutoRecommender extends Component
     JComboBox<String> cmbUse = new JComboBox<>(Globals.USAGE);
     JComboBox<String> cmbPC = new JComboBox<>(Globals.PC);
 
+    //-----------------------------------------------------------------------------------------------------------
+    /*
+    This is the auto recommender constructor
+    Input:  file size
+    Output: None
+    */
     public AutoRecommender(int size)
     {
         this.tree = new int[]  {0,1,500,1,1,-1,-4,-5,0,-2,0,-2,-3,-2, 0};
@@ -17,14 +23,24 @@ public class AutoRecommender extends Component
 
         AddInputEvents();
     }
-
+    //-----------------------------------------------------------------------------------------------------------
+    /*
+    This function shows popup form which gets relevant data from user in order to encrypt
+    Input:  None
+    Output: form exit code - OK / Cancel
+    */
     public int showForm()
     {
         Object[] inputFields = {"Usage Type: ", cmbUse, "PC Strength: ", cmbPC};
 
         return JOptionPane.showConfirmDialog(this, inputFields, "Auto Recommender", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
     }
-
+    //-----------------------------------------------------------------------------------------------------------
+    /*
+    This function iterates through the decision tree (heap)
+    Input:  tree index and features index
+    Output: index of the recommended encryption
+    */
     public int recommend(int tindex, int findex)
     {
         if(features[0] == 1 && findex == 1)
@@ -47,7 +63,12 @@ public class AutoRecommender extends Component
             return recommend(2 * tindex, findex + 1);
         }
     }
-
+    //-----------------------------------------------------------------------------------------------------------
+    /*
+    This function appends events to the popup form
+    Input:  None
+    Output: None
+    */
     private void AddInputEvents()
     {
         cmbUse.addActionListener( e ->
@@ -58,16 +79,6 @@ public class AutoRecommender extends Component
 }
 
 /*
-* usage - from user
-* File Size - from code
-* PC Power - from user
-*
-*
-*
-* Path - Enterprise - small file - slow pc
-* Knights - -2
-* Sudoku - Enterprise - small file - good pc
-* Shuffle - Home - good pc
-* Half Xor - Home - slow pc
-{0,1,0,1,0,0,-5,-4,0,0,0,0,0,0};
+* Enterprise - File size - PC power
+* Home - PC Power
 * */
