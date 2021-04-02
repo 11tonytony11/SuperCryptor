@@ -1,11 +1,17 @@
 public class Globals
 {
-    public static final String[] Encryptions = { "Path Encryption", "Knight's Tour", "Sudoku", "Shuffle Card" , "Half XOR"  };
-    public static final String[] Generators  = { "Fibonacci", "Pascal", "Hanoi" };
+    public static final String[] ENCRYPTIONS = { "Path Encryption", "Knight's Tour", "Sudoku", "Shuffle Card" , "Half XOR"  };
+    public static final String[] GENERATORS = { "Fibonacci", "Pascal", "Hanoi" };
+
+    public static final String[] USAGE = {"Enterprise", "Home"};
+    public static final String[] PC = {"Slow", "Fast"};
+
 
     public static String REGEX_FILTER = "[^a-zA-Z0-9,]";
     public static String KEY_PARSER   = ",";
     public static char DELIMITER      = '#';
+
+    public static int COMMA = 44;
 
     public static final int CHESS_BOARD  = 5;
     public static final int SUDOKU_BOARD = 9;
