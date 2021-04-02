@@ -13,8 +13,8 @@ public class MainWindow extends JFrame
     final private JTextField     fieldPath = new JTextField(Globals.FIELD_LEN);
 
     // Menus
-    final private JComboBox<String> comboEnc = new JComboBox<>(Globals.Encryptions);
-    final private JComboBox<String> comboGen = new JComboBox<>(Globals.Generators);
+    final private JComboBox<String> comboEnc = new JComboBox<>(Globals.ENCRYPTIONS);
+    final private JComboBox<String> comboGen = new JComboBox<>(Globals.GENERATORS);
 
     // Buttons
     final JButton btnEncrypt = new JButton("Encrypt");
@@ -30,7 +30,8 @@ public class MainWindow extends JFrame
     // Check Box
     final JCheckBox checkPwd = new JCheckBox("Show Key(s)");
 
-    // File handler and encryption
+    // File handler, encryption and recommender
+    AutoRecommender recommender;
     FileHandler fileHandler;
     Encryption enc;
 
@@ -160,6 +161,15 @@ public class MainWindow extends JFrame
                     this.keys.remove(0);
                     fieldKey.setText(keys.toString().replaceAll(Globals.REGEX_FILTER, ""));
                     JOptionPane.showMessageDialog(null, "Encryption Detected - Auto Decryption is enabled", "Auto Decryption", JOptionPane.INFORMATION_MESSAGE);
+                }
+                else
+                {
+                    this.recommender = new AutoRecommender((int) browser.getSelectedFile().length());
+
+                    if(this.recommender.showForm() == JOptionPane.OK_OPTION)
+                    {
+                        comboEnc.setSelectedIndex(this.recommender.recommend(1, 0));
+                    }
                 }
             }
         });
