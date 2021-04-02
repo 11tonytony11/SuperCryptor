@@ -2,10 +2,9 @@ import javax.swing.*;
 
 /*
 * Todo:
-** Implement Decision Tree
-** Connect Decision Tree to GUI
-** Final Fixes & Refactoring
+** Testing
 */
+
 public class Main
 {
     public static void main(String[] args)
