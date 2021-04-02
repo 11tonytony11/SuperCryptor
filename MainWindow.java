@@ -36,7 +36,12 @@ public class MainWindow extends JFrame
     Encryption enc;
 
     private List<Integer> keys;
-
+    //-----------------------------------------------------------------------------------------------------------
+    /*
+    This is the main windows constructor
+    Input:  None
+    Output: None
+    */
     public MainWindow()
     {
         super("SuperCryptor");
