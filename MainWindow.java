@@ -67,6 +67,10 @@ public class MainWindow extends JFrame
         comboGen.setVisible(false);
         labelGen.setVisible(false);
 
+        // Prevent operation on null
+        this.btnEncrypt.setEnabled(false);
+        this.btnDecrypt.setEnabled(false);
+
         pack();
     }
     //-----------------------------------------------------------------------------------------------------------
@@ -160,6 +164,10 @@ public class MainWindow extends JFrame
                 fieldPath.setText(browser.getSelectedFile().getPath());
                 fileHandler = new FileHandler(browser.getSelectedFile());
                 keys = fileHandler.getKeyFromFile();
+
+                this.btnEncrypt.setEnabled(true);
+                this.btnDecrypt.setEnabled(true);
+
                 if(keys != null)
                 {
                     comboEnc.setSelectedIndex(keys.get(0));
@@ -176,6 +184,11 @@ public class MainWindow extends JFrame
                         comboEnc.setSelectedIndex(this.recommender.recommend(1, 0));
                     }
                 }
+            }
+            else
+            {
+                this.btnEncrypt.setEnabled(false);
+                this.btnDecrypt.setEnabled(false);
             }
         });
     }
@@ -224,7 +237,7 @@ public class MainWindow extends JFrame
         {
             List<Integer> keys = generateKeys();
 
-            if(keys == null)
+            if(keys == null || this.fileHandler.loadFile() == null)
                 return;
 
             switch (comboEnc.getSelectedIndex())
